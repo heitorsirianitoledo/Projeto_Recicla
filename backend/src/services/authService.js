@@ -40,4 +40,49 @@ export class AuthService {
       token
     };
   }
+
+  static async registrar({ nome, cnpj, endereco, telefone, email, senha, perfil = 'gestor' }) {
+    const checkEmail = await pool.query('SELECT id_usuario FROM usuario WHERE email = $1', [email]);
+    if (checkEmail.rows.length > 0) {
+      throw new Error('Este e-mail já está cadastrado no sistema.');
+    }
+
+    const client = await pool.connect();
+
+    try {
+      await client.query('BEGIN');
+      const queryInstituicao = `
+        INSERT INTO instituicao (nome, cnpj, endereco, telefone)
+        VALUES ($1, $2, $3, $4)
+        RETURNING id_instituicao;
+      `;
+      const resInstituicao = await client.query(queryInstituicao, [nome, cnpj, endereco, telefone]);
+      const instituicaoId = resInstituicao.rows[0].id_instituicao;
+
+      const salt = await bcrypt.genSalt(10);
+      const senhaHash = await bcrypt.hash(senha, salt);
+
+      const queryUsuario = `
+        INSERT INTO usuario (nome, email, senha_hash, tipo_usuario, instituicao_id, ativo)
+        VALUES ($1, $2, $3, $4, $5, true)
+        RETURNING id_usuario, nome, email, tipo_usuario, instituicao_id;
+      `;
+      const resUsuario = await client.query(queryUsuario, [
+        nome,
+        email,
+        senhaHash,
+        perfil,
+        instituicaoId
+      ]);
+
+      await client.query('COMMIT');
+
+      return resUsuario.rows[0];
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
 }
