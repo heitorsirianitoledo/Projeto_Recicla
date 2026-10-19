@@ -21,46 +21,50 @@
         <p>Já possui uma conta? <a href="login.html">Login</a></p>
       </div>
 
-      <div class="form-grid">
-        <div class="field">
-          <label>Nome da instituição</label>
-          <input type="text" />
+      <form id="formCadastro">
+        <div class="form-grid">
+          <div class="field">
+            <label for="cadNome">Nome da instituição</label>
+            <input type="text" id="cadNome" placeholder="Ex: Recicla +" required />
+          </div>
+
+          <div class="field">
+            <label for="cadCnpj">CNPJ</label>
+            <input type="text" id="cadCnpj" placeholder="00.000.000/0001-00" required />
+          </div>
+
+          <div class="field">
+            <label for="cadEndereco">Endereço</label>
+            <input type="text" id="cadEndereco" placeholder="Rua, Bairro, Cidade" required />
+          </div>
+
+          <div class="field">
+            <label for="cadTelefone">Telefone</label>
+            <input type="tel" id="cadTelefone" placeholder="(62) 90000-0000" required />
+          </div>
+
+          <div class="field full">
+            <label for="cadEmail">Email</label>
+            <input type="email" id="cadEmail" placeholder="contato@empresa.com.br" required />
+          </div>
+
+          <div class="field">
+            <label for="cadSenha">Senha</label>
+            <input type="password" id="cadSenha" placeholder="Mínimo 6 caracteres" required />
+          </div>
+
+          <div class="field">
+            <label for="cadConfirmaSenha">Confirmar senha</label>
+            <input type="password" id="cadConfirmaSenha" placeholder="Confirme a senha" required />
+          </div>
         </div>
 
-        <div class="field">
-          <label>CNPJ</label>
-          <input type="text" />
-        </div>
-
-        <div class="field">
-          <label>Endereço</label>
-          <input type="text" />
-        </div>
-
-        <div class="field">
-          <label>Telefone</label>
-          <input type="tel" />
-        </div>
-
-        <div class="field full">
-          <label>Email</label>
-          <input type="email" />
-        </div>
-
-        <div class="field">
-          <label>Senha</label>
-          <input type="password" />
-        </div>
-
-        <div class="field">
-          <label>Confirmar senha</label>
-          <input type="password" />
-        </div>
-      </div>
-
-      <button class="btn-primary">Criar conta</button>
+        <button type="submit" class="btn-primary" id="btnCadastrar">Criar conta</button>
+      </form>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="auth.js"></script>
 </body>
 </html>
